@@ -9,6 +9,9 @@ import {
 import Home from './Home.jsx';
 import Add from './Add.jsx';
 import Update from './Update.jsx';
+import Register from './Register.jsx';
+import Provider from './Provider.jsx';
+import Private from './Private.jsx';
 
 const router = createBrowserRouter([
   {
@@ -17,17 +20,21 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <Home/>,
-        loader: () => fetch('http://localhost:5000/')
+        element: <Private><Home/></Private>,
+        loader: () => fetch('http://localhost:5000/', {credentials: 'include'})
       },
       {
         path: '/add',
-        element: <Add/>
+        element: <Private><Add/></Private>
       },
       {
         path: '/update/:id',
-        element: <Update/>,
+        element: <Private><Update/></Private>,
         loader: ({params}) => fetch(`http://localhost:5000/update/${params.id}`)
+      },
+      {
+        path: '/register',
+        element: <Register/>
       }
     ]
   }
@@ -35,6 +42,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router}/>
+    <Provider>
+      <RouterProvider router={router}/>
+    </Provider>
   </React.StrictMode>,
 )
